@@ -7,11 +7,9 @@ import "react-quill/dist/quill.snow.css";
 import { GlobalContext } from "../../context/GlobalContext";
 
 const Note = ({ editValue, width, height }) => {
-
   const { note, setNote } = useContext(GlobalContext);
 
   const [value, setValue] = useState("");
-  
 
   var toolbarOptions = [
     ["bold", "italic", "underline"],
@@ -51,8 +49,23 @@ const Note = ({ editValue, width, height }) => {
 
   return (
     <>
-      <div style={{display:"flex", flexDirection:"row", width: "98%", marginLeft:"6px"}}>
-        <div style={{display:"flex", flexDirection:"column", width: "100%", height:"100%", marginBottom: "30px"}}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "98%",
+          marginLeft: "6px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+            marginBottom: "30px",
+          }}
+        >
           <div style={{ width: width }}>
             <div ref={quillRef} style={{ minHeight: height }} />
           </div>

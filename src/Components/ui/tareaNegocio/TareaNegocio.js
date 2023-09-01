@@ -18,7 +18,7 @@ import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import { UPDATE_ESTADO_TAREA } from "../../../graphql/mutations/tareas";
 import { GlobalContext } from "../../context/GlobalContext";
-import {encode} from "base-64"
+import { encode } from "base-64";
 
 export const TareaNegocio = ({ tarea, origen = "" }) => {
   const { pollTareas, pollTareasClientes } = useContext(GlobalContext);
@@ -46,9 +46,9 @@ export const TareaNegocio = ({ tarea, origen = "" }) => {
   const handleModalDetalleTarea = (tarea) => {
     let cliente = tarea;
 
-    cliente = encode(JSON.stringify(cliente))
+    cliente = encode(JSON.stringify(cliente));
 
-    return history.push(`/detalletarea/?id=${tarea.tar_id}&data=${cliente}`)
+    return history.push(`/detalletarea/?id=${tarea.tar_id}&data=${cliente}`);
   };
 
   const [updateEstadoTareaIframeResolver] = useMutation(UPDATE_ESTADO_TAREA, {
@@ -285,7 +285,9 @@ export const TareaNegocio = ({ tarea, origen = "" }) => {
               </div>
               <div className="tarea-negocio-linea-inferior-dos">
                 <div className="VerMas">
-                  {(tarea.not_id && tarea.not_desc !== "<p><br></p>") && tarea.not_desc ||
+                  {(tarea.not_id &&
+                    tarea.not_desc !== "<p><br></p>" &&
+                    tarea.not_desc) ||
                   tarea.up_id ? (
                     <DownOutline />
                   ) : null}
@@ -293,7 +295,10 @@ export const TareaNegocio = ({ tarea, origen = "" }) => {
               </div>
             </div>
           </div>
-          {tarea.not_id && tarea.not_desc !== "<p><br></p>" && tarea.not_desc ? (
+          {tarea.not_id &&
+          tarea.not_desc !== "<p><br></p>" &&
+          tarea.not_desc !== "null" &&
+          tarea.not_desc ? (
             <NotaTareaNegocio
               nota={tarea}
               origen={origen}

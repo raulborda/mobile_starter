@@ -190,6 +190,8 @@ const NuevaTarea = () => {
       pri_id: values.pri_id[0],
     };
 
+    //! REVISAR
+
     let inputNota = {
       not_desc: "",
       not_importancia: "",
@@ -252,31 +254,33 @@ const NuevaTarea = () => {
           ) : null}
 
           {clientes &&
-            clientes.map((cliente) => (
-              <>
-                {buscador !== "" ? (
-                  <div className="div_clienteSelect_btn" key={cliente.cli_id}>
-                    <input
-                      className="input-cliente-nueva-tarea input-cliente-seleccionado"
-                      type="text"
-                      onClick={(value) => handleSelect(value, cliente.cli_id)}
-                      defaultValue={cliente.cli_nombre}
-                      key={cliente.cli_id}
-                    />
-                    {ocultarC && (
-                      <Button
-                        className="btn_cliente"
-                        onClick={() => handleLimpiar()}
-                      >
-                        X
-                      </Button>
-                    )}
-                  </div>
-                ) : (
-                  ""
-                )}
-              </>
-            ))}
+            clientes.map((cliente) => {
+              return (
+                <div key={cliente.cli_id}>
+                  {buscador !== "" ? (
+                    <div className="div_clienteSelect_btn">
+                      <input
+                        className="input-cliente-nueva-tarea input-cliente-seleccionado"
+                        type="text"
+                        onClick={(value) => handleSelect(value, cliente.cli_id)}
+                        defaultValue={cliente.cli_nombre}
+                        key={cliente.cli_id}
+                      />
+                      {ocultarC && (
+                        <Button
+                          className="btn_cliente"
+                          onClick={() => handleLimpiar()}
+                        >
+                          X
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
           {alertaCliente && (
             <span
               style={{

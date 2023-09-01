@@ -311,7 +311,7 @@ const DetalleTarea = () => {
           <Form.Item label="Nota" name="not_desc">
             <Note
               editValue={
-                tarea.not_desc === "<p><br></p>" ? null : tarea.not_desc
+                tarea.not_desc === "<p><br></p>" ? "" : tarea.not_desc
               }
               width="100%"
               height="100%"

@@ -24,11 +24,10 @@ export const NotaTareaNegocio = ({
     return color;
   };
 
-  let notaFecha
-  if(nota.not_fechahora) {
+  let notaFecha;
+  if (nota.not_fechahora) {
     notaFecha = moment(nota.not_fechahora, "YYYY-MM-DD").format("LL");
   }
-  
 
   if (display === true) {
     return (
@@ -50,11 +49,14 @@ export const NotaTareaNegocio = ({
             <p style={{ margin: "0px" }}>{nota.pri_desc}</p>
           </div>
         </div>
-        <div style={{padding: "4px 8px"}}
-          dangerouslySetInnerHTML={{
-            __html: nota.not_desc,
-          }}
-        ></div>
+        {nota?.not_desc !== "null" && (
+          <div
+            style={{ padding: "4px 8px" }}
+            dangerouslySetInnerHTML={{
+              __html: nota.not_desc,
+            }}
+          ></div>
+        )}
       </div>
     );
   } else {
