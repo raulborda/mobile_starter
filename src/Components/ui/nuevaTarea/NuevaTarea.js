@@ -14,10 +14,11 @@ import { GET_TIPO_ORIGEN } from "../../../graphql/queries/TipoOrigen";
 import { NEW_TAREA } from "../../../graphql/mutations/tareas";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
+import { prioridad } from "../../../utils/prioridad";
 
 const NuevaTarea = () => {
   let history = useHistory();
-  const [idSelector, setIdSelector] = useState();
+  const [idSelector, setIdSelector] = useState(3);
 
   const [clientes, setClientes] = useState([]);
   const [clienteSelect, setClienteSelect] = useState();
@@ -104,48 +105,6 @@ const NuevaTarea = () => {
 
   //TODO FIN SECCION DE ELEGIR ORIGEN TAREA
 
-  const prioridad = [
-    {
-      label: (
-        <div
-          key={1}
-          className={
-            idSelector === 1 ? "selector-alta seleccionado" : "selector-alta"
-          }
-        >
-          <p className="selector-texto">ALTA</p>
-        </div>
-      ),
-      value: 1,
-    },
-    {
-      label: (
-        <div
-          key={2}
-          className={
-            idSelector === 2 ? "selector-media seleccionado" : "selector-media"
-          }
-        >
-          <p className="selector-texto">MEDIA</p>
-        </div>
-      ),
-      value: 2,
-    },
-    {
-      label: (
-        <div
-          key={3}
-          className={
-            idSelector === 3 ? "selector-baja seleccionado" : "selector-baja"
-          }
-        >
-          <p className="selector-texto">BAJA</p>
-        </div>
-      ),
-      value: 3,
-    },
-  ];
-
   //* INICIO SECCION CARGAR UNA NUEVA TAREA
 
   const [newTareaIframeResolver] = useMutation(NEW_TAREA, {
@@ -187,10 +146,8 @@ const NuevaTarea = () => {
       ale_id: null,
       tar_alertanum: null,
       tip_id: values.tip_id.value,
-      pri_id: values.pri_id[0],
+      pri_id: idSelector,
     };
-
-    //! REVISAR
 
     let inputNota = {
       not_desc: "",
@@ -401,7 +358,6 @@ const NuevaTarea = () => {
         </div>
         <Form.Item
           label="Prioridad"
-          name="pri_id"
           rules={[
             {
               required: true,
@@ -418,8 +374,17 @@ const NuevaTarea = () => {
             }}
             showCheckMark={false}
             label="Prioridad"
-            options={prioridad}
-            onChange={(v) => setIdSelector(v[0])}
+            options={prioridad(idSelector)}
+            onChange={(v) =>
+              setIdSelector((prevState) => {
+                if (v.length < 1) {
+                  return prevState;
+                } else {
+                  return v[0];
+                }
+              })
+            }
+            value={[idSelector]}
           />
         </Form.Item>
       </Form>

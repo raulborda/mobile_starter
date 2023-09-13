@@ -13,6 +13,7 @@ import Select from "react-select";
 import Note from "../note/Note";
 import { UPDATE_TAREA } from "../../../graphql/mutations/tareas";
 import { decode } from "base-64";
+import { prioridad } from "../../../utils/prioridad";
 
 const DetalleTarea = () => {
   const { userId, note, setNote, pollTareas } = useContext(GlobalContext);
@@ -27,7 +28,7 @@ const DetalleTarea = () => {
 
   const [tarea, setTarea] = useState(null);
 
-  const [idSelector, setIdSelector] = useState();
+  const [idSelector, setIdSelector] = useState(3);
 
   const [file] = useState({});
   const [fList, setFlist] = useState([]);
@@ -107,44 +108,6 @@ const DetalleTarea = () => {
     }
   }, [tarea]);
 
-  const prioridad = [
-    {
-      label: (
-        <div
-          className={
-            idSelector === 1 ? "selector-alta seleccionado" : "selector-alta"
-          }
-        >
-          <p className="selector-texto">ALTA</p>
-        </div>
-      ),
-      value: 1,
-    },
-    {
-      label: (
-        <div
-          className={
-            idSelector === 2 ? "selector-media seleccionado" : "selector-media"
-          }
-        >
-          <p className="selector-texto">MEDIA</p>
-        </div>
-      ),
-      value: 2,
-    },
-    {
-      label: (
-        <div
-          className={
-            idSelector === 3 ? "selector-baja seleccionado" : "selector-baja"
-          }
-        >
-          <p className="selector-texto">BAJA</p>
-        </div>
-      ),
-      value: 3,
-    },
-  ];
 
   const [form] = Form.useForm();
 
@@ -166,18 +129,19 @@ const DetalleTarea = () => {
       tar_asunto: v.tar_asunto,
       tar_vencimiento: v.tar_vencimiento,
       tar_horavencimiento: v.tar_horavencimiento,
+      ori_id: tarea.ori_id,
       est_id: 1,
       usu_id: userId,
       cli_id: tarea.cli_id,
       ale_id: null,
       tar_alertanum: null,
       tip_id: v.tip_id ? v.tip_id.value : tarea.tip_id,
-      pri_id: v.pri_id ? Number(v.pri_id[0]) : tarea.pri_id,
+      pri_id: idSelector,
     };
 
     let inputNota = {
       not_desc: note ? note : "",
-      not_importancia: v.pri_id ? Number(v.pri_id[0]) : tarea.pri_id,
+      not_importancia: idSelector,
       not_id: tarea.not_id,
     };
 
@@ -310,23 +274,13 @@ const DetalleTarea = () => {
           </div>
           <Form.Item label="Nota" name="not_desc">
             <Note
-              editValue={
-                tarea.not_desc === "<p><br></p>" ? "" : tarea.not_desc
-              }
+              editValue={tarea.not_desc === "<p><br></p>" ? "" : tarea.not_desc}
               width="100%"
               height="100%"
             ></Note>
           </Form.Item>
 
-          <Form.Item
-            label="Prioridad"
-            name="pri_id"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
+          <Form.Item label="Prioridad">
             <Selector
               style={{
                 "--border-radius": "10px",
@@ -337,8 +291,17 @@ const DetalleTarea = () => {
               }}
               showCheckMark={false}
               label="Prioridad"
-              options={prioridad}
-              onChange={(v) => setIdSelector(v[0])}
+              options={prioridad(idSelector)}
+              onChange={(v) =>
+                setIdSelector((prevState) => {
+                  if (v.length < 1) {
+                    return prevState;
+                  } else {
+                    return v[0];
+                  }
+                })
+              }
+              value={[idSelector]}
             />
           </Form.Item>
         </Form>
