@@ -22,3 +22,19 @@ code {
 ::-webkit-scrollbar-thumb {
   background-color: lightgray;
 }
+
+* {
+  overscroll-behavior-y: contain;
+}
+
+.refresh-loading {
+  position: absolute;
+  top: 0;
+  height: 45px;
+  align-items: center;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  z-index: 999999;
+}

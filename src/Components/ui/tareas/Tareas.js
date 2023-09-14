@@ -3,7 +3,7 @@ import moment from "moment";
 import ListaTarea from "../listaTareas/ListaTarea";
 import { CalendarOutline } from "antd-mobile-icons";
 import "./Tareas.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useQuery } from "@apollo/client";
 import { GET_TAREAS_CALENDARIO } from "../../../graphql/queries/TareaCalendario";
@@ -14,8 +14,14 @@ import { TareasVencidas } from "../tareasVencidas/TareasVencidas";
 import { GET_TAREAS_MOBILE } from "../../../graphql/queries/TareaMobile";
 
 const Tareas = () => {
-  const { tareas, setTareas, userId, setPollTareas, tabTareasActivo, setTabTareasActivo } =
-    useContext(GlobalContext);
+  const {
+    tareas,
+    setTareas,
+    userId,
+    setPollTareas,
+    tabTareasActivo,
+    setTabTareasActivo,
+  } = useContext(GlobalContext);
 
   const [tareasCalendario, setTareasCalendario] = useState();
 
@@ -28,8 +34,8 @@ const Tareas = () => {
     data: dataCalendario,
     error,
     loading,
-    startPolling, 
-    stopPolling
+    startPolling,
+    stopPolling,
   } = useQuery(GET_TAREAS_CALENDARIO, {
     variables: {
       idUsuario: userId,
@@ -40,8 +46,8 @@ const Tareas = () => {
     data: dataMobile,
     error: errorMobile,
     loading: loadingMobile,
-    startPolling: startPollingMobile, 
-    stopPolling: stopPollingMobile
+    startPolling: startPollingMobile,
+    stopPolling: stopPollingMobile,
   } = useQuery(GET_TAREAS_MOBILE, {
     variables: {
       idUsuario: userId,
@@ -74,10 +80,12 @@ const Tareas = () => {
   };
 
   useEffect(() => {
-    setPollTareas({inicial:startPolling, stop:stopPolling});
+    setPollTareas({ inicial: startPolling, stop: stopPolling });
     if (dataCalendario) {
-      if(JSON.parse(dataCalendario.getTareasPropiasMobileResolver)){
-        ordenarDatos(JSON.parse(dataCalendario.getTareasPropiasMobileResolver).tareasPropiasPorFecha,
+      if (JSON.parse(dataCalendario.getTareasPropiasMobileResolver)) {
+        ordenarDatos(
+          JSON.parse(dataCalendario.getTareasPropiasMobileResolver)
+            .tareasPropiasPorFecha,
           filtroFecha
         );
         setTareasCalendario(
@@ -92,7 +100,7 @@ const Tareas = () => {
     setTimeout(() => {
       stopPollingMobile();
     }, 1000);
-  }, [dataCalendario])
+  }, [dataCalendario]);
 
   useEffect(() => {
     if (dataMobile) {
@@ -100,10 +108,6 @@ const Tareas = () => {
     }
   }, [dataMobile]);
 
-  useEffect(() => {
-
-  }, [tareasMobile])
-  
   return (
     <CapsuleTabs
       className="capsule_contenedor"
@@ -117,7 +121,7 @@ const Tareas = () => {
             <div>
               <Calendar
                 selectionMode="single"
-                weekStartsOn='Monday'
+                weekStartsOn="Monday"
                 defaultValue={filtroFecha}
                 renderLabel={
                   tareasCalendario &&
