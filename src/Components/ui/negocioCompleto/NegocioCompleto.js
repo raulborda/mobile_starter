@@ -10,10 +10,10 @@ import { GET_COUNT_TAREAS } from "../../../graphql/queries/NegocioContent";
 import { NegocioCompletado } from "./NegocioCompletado";
 import "./negocioCompleto.css";
 import { NegocioPlanificado } from "./NegocioPlanificado";
-import { decode } from "base-64";
+import { Base64 } from "js-base64";
 
 export const NegocioCompleto = () => {
-  const [tareasDefinitivo, setTareasDefinitivo] = useState([{}]);
+  const [tareasDefinitivo, setTareasDefinitivo] = useState([]);
 
   const location = useLocation();
 
@@ -77,9 +77,9 @@ export const NegocioCompleto = () => {
   useEffect(() => {
     try {
       const data = new URLSearchParams(search).get("data");
-      let neg = JSON.parse(decode(data));
+      let neg = JSON.parse(Base64.decode(data));
       if (typeof neg === "object" && neg !== null) {
-        setNegocio(JSON.parse(decode(data)));
+        setNegocio(neg);
         setError(false);
       } else {
         setError(true);
@@ -154,21 +154,22 @@ export const NegocioCompleto = () => {
                   <div className="negocio-grafico-degrade"></div>
                   <p className="negocio-tareas">Tareas</p>
                   <div className="negocio-grafico-tareas">
-                    {tareasDefinitivo.map((tarea) => {
-                      return (
-                        <span
-                          className="negocio-caja-tarea-grafico"
-                          key={tarea.tar_id}
-                          style={{
-                            backgroundColor: `${getColor(tarea.tip_id)}`,
-                            width: `${tarea.porcentajeTipoTarea}%`,
-                          }}
-                        ></span>
-                      );
-                    })}
+                    {tareasDefinitivo?.length > 0 &&
+                      tareasDefinitivo.map((tarea) => {
+                        return (
+                          <span
+                            className="negocio-caja-tarea-grafico"
+                            key={tarea.tip_id}
+                            style={{
+                              backgroundColor: `${getColor(tarea.tip_id)}`,
+                              width: `${tarea.porcentajeTipoTarea}%`,
+                            }}
+                          ></span>
+                        );
+                      })}
                   </div>
                   <div className="negocio-grafico-referencias">
-                    {tareasDefinitivo &&
+                    {tareasDefinitivo?.length > 0 &&
                       tareasDefinitivo.map((tarea) => {
                         return tarea.tip_id ? (
                           <div

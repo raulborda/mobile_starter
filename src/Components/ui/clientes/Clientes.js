@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { GET_CLIENTE } from "../../../graphql/queries/Cliente";
 import { GlobalContext } from "../../context/GlobalContext";
-import {encode} from "base-64";
+import { Base64 } from "js-base64";
 import "./Clientes.css";
 
 const Clientes = () => {
@@ -19,7 +19,7 @@ const Clientes = () => {
   const redirecInfo = (id) => {
     let cliente = clientes.filter((cliente) => cliente.cli_id === id);
 
-    let encriptedClient = encode(JSON.stringify(cliente[0]));
+    let encriptedClient = Base64.encode(JSON.stringify(cliente[0]), true);
     return history.push(`/cliente-individual/${id}?data=${encriptedClient}`)
   };
 

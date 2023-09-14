@@ -12,8 +12,8 @@ import { GET_TIPO_TAREA } from "../../../graphql/queries/TipoTarea";
 import Select from "react-select";
 import Note from "../note/Note";
 import { UPDATE_TAREA } from "../../../graphql/mutations/tareas";
-import { decode } from "base-64";
 import { prioridad } from "../../../utils/prioridad";
+import { Base64 } from "js-base64";
 
 const DetalleTarea = () => {
   const { userId, note, setNote, pollTareas } = useContext(GlobalContext);
@@ -84,14 +84,17 @@ const DetalleTarea = () => {
   useEffect(() => {
     try {
       const data = new URLSearchParams(search).get("data");
-      let tar = JSON.parse(decode(data));
+
+      const tar = JSON.parse(Base64.decode(data));
+
       if (typeof tar === "object" && tar !== null) {
-        setTarea(JSON.parse(decode(data)));
+        setTarea(tar);
         setError(false);
       } else {
         setError(true);
       }
     } catch (error) {
+      console.log(error);
       setError(true);
     }
   }, [location]);
@@ -107,7 +110,6 @@ const DetalleTarea = () => {
       });
     }
   }, [tarea]);
-
 
   const [form] = Form.useForm();
 

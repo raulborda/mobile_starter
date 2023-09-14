@@ -7,7 +7,7 @@ import { ClienteTareas } from "./ClienteTareas";
 import "./clienteIndividual.css";
 import { ClienteNegocios } from "./ClienteNegocios";
 import { GlobalContext } from "../../../context/GlobalContext";
-import { decode } from "base-64";
+import { Base64 } from "js-base64";
 
 export const ClienteIndividual = () => {
   const { tabClienteActivo, setTabClienteActivo } = useContext(GlobalContext);
@@ -19,9 +19,9 @@ export const ClienteIndividual = () => {
   useEffect(() => {
     const search = location.search;
     const data = new URLSearchParams(search).get("data");
-    let cliente = JSON.parse(decode(data));
+    let cliente = JSON.parse(Base64.decode(data));
     if (typeof cliente === "object" && cliente !== null) {
-      setClienteSelect(JSON.parse(decode(data)));
+      setClienteSelect(cliente);
       setError(false);
     } else {
       setError(true);

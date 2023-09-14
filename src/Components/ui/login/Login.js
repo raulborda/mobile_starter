@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import useAuth from "../../../auth/useAuth";
 import { GlobalContext } from "../../context/GlobalContext";
 import { saveDataInStorage } from "../../storage/manageStorage";
-import * as base64 from "base-64";
+import { Base64 } from "js-base64";
 import { LOGIN_AUTHENTICATION } from "../../../graphql/queries/loginAuthentication";
 import { useLazyQuery } from "@apollo/client";
 
@@ -49,8 +49,8 @@ const Login = () => {
   }, [data]);
 
   const onFinish = (values) => {
-    let usuario = base64.encode(values.username);
-    let contrasena = base64.encode(values.password);
+    let usuario = Base64.encode(values.username, true);
+    let contrasena = Base64.encode(values.password, true);
 
     loginIframeResolver({
       variables: { credentials: { username: usuario, password: contrasena } },
